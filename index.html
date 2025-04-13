@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart Car Parking</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: black;
+      color: white;
+      overflow-x: hidden;
+    }
+
+    .stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background-color: white;
+      border-radius: 50%;
+      animation: twinkle 3s infinite, moveStar 20s linear infinite;
+      opacity: 0.8;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+
+    @keyframes moveStar {
+      from { transform: translateY(-10px); }
+      to { transform: translateY(100vh); }
+    }
+
+    .main-container {
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      padding: 15px 50px;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: white;
+    }
+
+    .right-nav a {
+      margin-left: 20px;
+      color: white;
+      text-decoration: none;
+    }
+
+    .search-icon {
+      font-size: 20px;
+      color: white;
+      cursor: pointer;
+    }
+
+    .hero {
+      padding: 80px 20px;
+      background-color: rgba(0, 0, 0, 0.4);
+      margin-top: 50px;
+    }
+
+    .hero-text h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+      animation: fadeIn 2s ease-in-out;
+    }
+
+    .hero-text p {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+      animation: fadeIn 3s ease-in-out;
+    }
+
+    .hero-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .hero-btn {
+      padding: 15px 25px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .primary-btn {
+      background-color: white;
+      color: black;
+    }
+
+    .secondary-btn {
+      background-color: transparent;
+      border: 1px solid white;
+      color: white;
+    }
+
+    .about-container {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 30px;
+      background-color: rgba(0, 0, 0, 0.2);
+      border-radius: 12px;
+      opacity: 0;
+      animation: fadeIn 2s ease-in-out forwards;
+    }
+
+    .about-header {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+
+    .about-text {
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 30px;
+    }
+
+    .team {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .member {
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 10px;
+      width: 220px;
+    }
+
+    .name {
+      font-size: 1.2rem;
+      color: white;
+    }
+
+    .parking-container {
+      margin: 40px auto;
+      background-color: rgba(255, 255, 255, 0.05);
+      padding: 30px;
+      border-radius: 12px;
+      max-width: 900px;
+    }
+
+    .section-header {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+
+    .stats-row {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 10px;
+      width: 45%;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 700;
+      color: white;
+    }
+
+    .slot {
+      background-color: green;
+      margin: 10px;
+      padding: 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      width: 80px;
+      text-align: center;
+      font-size: 1.1rem;
+      display: inline-block;
+      color: white;
+      transition: transform 0.2s ease-in-out;
+    }
+
+    .slot:hover {
+      background-color: #0f0;
+      transform: scale(1.1);
+    }
+
+    .selected-slot {
+      background-color: white;
+      color: black;
+    }
+
+    .occupied-slot {
+      background-color: red !important;
+      cursor: not-allowed;
+    }
+
+    .hour-options {
+      display: none;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .hour-option {
+      background-color: white;
+      color: black;
+      padding: 10px 20px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      border-radius: 5px;
+      border: none;
+    }
+
+    .bill {
+      margin-top: 30px;
+      display: none;
+    }
+
+    .bill-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .bill-table th, .bill-table td {
+      padding: 10px;
+      border: 1px solid white;
+      text-align: center;
+    }
+
+    .bill-table th {
+      background-color: rgba(255,255,255,0.2);
+    }
+
+    .bill-table td {
+      color: white;
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="stars" id="starsContainer"></div>
+
+  <div class="main-container">
+    <nav class="navbar">
+      <div class="logo">SMART CAR PARKING SYSTEM</div>
+      <div class="right-nav"></div>
+    </nav>
+
+    <section class="hero">
+      <div class="hero-text">
+        <h1>Smart Car Parking</h1>
+        <p>"Park Like a Pro, No More Searching for Spaces!"  
+           "Because Your Car Deserves a VIP Spot."</p>
+        <div class="hero-buttons">
+          <button class="hero-btn primary-btn" onclick="showParkingArea()">Parking Area</button>
+          <button class="hero-btn secondary-btn" onclick="showBookingPage()">Booking</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="parking-container" id="parkingSystem" style="display:none;">
+    <h2 class="section-header">Smart Car Parking</h2>
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-number" id="availableCount">10</div><div>Available</div></div>
+      <div class="stat-card"><div class="stat-number" id="occupiedCount">0</div><div>Occupied</div></div>
+    </div>
+    <div id="slotsGrid"></div>
+    <div class="hour-options" id="hourOptions"></div>
+  </div>
+
+  <!-- Step Down Space (only 2 lines now) -->
+  <br><br>
+
+  <div class="about-container" id="about">
+    <h2 class="about-header">About Us</h2>
+    <p class="about-text">We are a team of passionate innovators dedicated to making parking smarter and hassle-free. With a blend of tech expertise and user-centric design, we’re here to redefine how you park — effortlessly and efficiently.</p>
+    <div class="team">
+      <div class="member"><div class="name">Mokish J</div></div>
+      <div class="member"><div class="name">Surendar C R</div></div>
+      <div class="member"><div class="name">Vignesh P</div></div>
+    </div>
+  </div>
+
+  <div class="bill" id="bill">
+    <h3>Parking Invoice</h3>
+    <table class="bill-table">
+      <tr><th>IN Time</th><th>OUT Time</th><th>Duration</th><th>Amount</th></tr>
+      <tr>
+        <td id="bill-in-time">--</td>
+        <td id="bill-out-time">--</td>
+        <td id="bill-total-time">--</td>
+        <td id="bill-amount">--</td>
+      </tr>
+    </table>
+    <button onclick="redirectToNextPage()">Next Page</button>
+  </div>
+
+  <script>
+    const totalSlots = 10;
+    let available = totalSlots;
+    let selectedSlot = null;
+    const starsContainer = document.getElementById('starsContainer');
+
+    for (let i = 0; i < 150; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+      star.style.top = `${Math.random() * 100}%`;
+      star.style.left = `${Math.random() * 100}%`;
+      star.style.animationDuration = `${5 + Math.random() * 5}s`;
+      starsContainer.appendChild(star);
+    }
+
+    function showBookingPage() {
+      document.getElementById('parkingSystem').style.display = 'block';
+      document.getElementById('about').style.display = 'none';
+    }
+
+    function showParkingArea() {
+      alert("You are viewing the parking area.");
+    }
+
+    function createSlots() {
+      const grid = document.getElementById('slotsGrid');
+      const options = document.getElementById('hourOptions');
+      grid.innerHTML = '';
+      options.innerHTML = '';
+      selectedSlot = null;
+
+      for (let i = 1; i <= totalSlots; i++) {
+        const div = document.createElement('div');
+        div.className = 'slot';
+        div.id = 'slot-' + i;
+        div.innerText = 'Slot ' + i;
+        div.onclick = () => selectSlot(i);
+        grid.appendChild(div);
+      }
+
+      for (let i = 1; i <= 10; i++) {
+        const btn = document.createElement('button');
+        btn.className = 'hour-option';
+        btn.innerText = `${i} Hour${i > 1 ? 's' : ''}`;
+        btn.onclick = () => selectDuration(i);
+        options.appendChild(btn);
+      }
+    }
+
+    function selectSlot(num) {
+      const slot = document.getElementById('slot-' + num);
+      if (slot.classList.contains('occupied-slot')) return;
+
+      if (selectedSlot) {
+        document.getElementById('slot-' + selectedSlot).classList.remove('selected-slot');
+      }
+      selectedSlot = num;
+      slot.classList.add('selected-slot');
+      document.getElementById('hourOptions').style.display = 'flex';
+    }
+
+    function selectDuration(hours) {
+      if (!selectedSlot) return alert("Please select a slot first.");
+      const slot = document.getElementById('slot-' + selectedSlot);
+      const inTime = new Date();
+      const outTime = new Date(inTime.getTime() + hours * 60 * 60 * 1000);
+      const price = hours * 50;
+
+      slot.classList.remove('selected-slot');
+      slot.classList.add('occupied-slot');
+      slot.onclick = null;
+
+      document.getElementById('bill-in-time').innerText = inTime.toLocaleString();
+      document.getElementById('bill-out-time').innerText = outTime.toLocaleString();
+      document.getElementById('bill-total-time').innerText = `${hours} Hour${hours > 1 ? 's' : ''}`;
+      document.getElementById('bill-amount').innerText = `₹${price}`;
+      document.getElementById('bill').style.display = 'block';
+
+      available--;
+      document.getElementById('availableCount').innerText = available;
+      document.getElementById('occupiedCount').innerText = totalSlots - available;
+      selectedSlot = null;
+      document.getElementById('hourOptions').style.display = 'none';
+    }
+
+    function redirectToNextPage() {
+      window.location.href = 'nextPage.html';
+    }
+
+    createSlots();
+  </script>
+</body>
+</html>
