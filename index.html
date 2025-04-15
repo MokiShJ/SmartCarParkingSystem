@@ -25,6 +25,7 @@
       width: 100%;
       height: 100%;
       z-index: -1;
+      overflow: hidden;
     }
 
     .star {
@@ -33,23 +34,29 @@
       height: 2px;
       background-color: white;
       border-radius: 50%;
-      animation: twinkle 3s infinite, moveStar 20s linear infinite;
-      opacity: 0.8;
+      opacity: 0.5;
+      animation: twinkle 2s infinite ease-in-out, moveStar 20s linear infinite;
     }
 
     @keyframes twinkle {
-      0%, 100% { opacity: 0.3; }
-      50% { opacity: 1; }
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.5); }
     }
 
     @keyframes moveStar {
-      from { transform: translateY(-10px); }
-      to { transform: translateY(100vh); }
+      from { transform: translateY(-10px) rotate(0deg); }
+      to { transform: translateY(100vh) rotate(360deg); }
     }
 
     .main-container {
       text-align: center;
       padding: 60px 20px;
+      animation: fadeSlideDown 2s ease-in-out;
+    }
+
+    @keyframes fadeSlideDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .navbar {
@@ -65,34 +72,28 @@
       color: white;
     }
 
-    .right-nav a {
-      margin-left: 20px;
-      color: white;
-      text-decoration: none;
-    }
-
-    .search-icon {
-      font-size: 20px;
-      color: white;
-      cursor: pointer;
-    }
-
     .hero {
       padding: 80px 20px;
       background-color: rgba(0, 0, 0, 0.4);
       margin-top: 50px;
+      animation: fadeIn 2.5s ease-in;
     }
 
     .hero-text h1 {
       font-size: 3rem;
       margin-bottom: 10px;
-      animation: fadeIn 2s ease-in-out;
+      animation: popIn 1s ease-in-out;
     }
 
     .hero-text p {
       font-size: 1.2rem;
       margin-bottom: 20px;
-      animation: fadeIn 3s ease-in-out;
+      animation: fadeIn 2s ease-in-out;
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
     }
 
     .hero-buttons {
@@ -107,6 +108,12 @@
       border: none;
       border-radius: 5px;
       cursor: pointer;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .hero-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 20px white;
     }
 
     .primary-btn {
@@ -126,8 +133,7 @@
       padding: 30px;
       background-color: rgba(0, 0, 0, 0.2);
       border-radius: 12px;
-      opacity: 0;
-      animation: fadeIn 2s ease-in-out forwards;
+      animation: fadeIn 2s ease-in forwards;
     }
 
     .about-header {
@@ -153,11 +159,16 @@
       padding: 20px;
       border-radius: 10px;
       width: 220px;
+      transition: transform 0.3s ease;
+    }
+
+    .member:hover {
+      transform: scale(1.05);
+      background-color: rgba(255,255,255,0.2);
     }
 
     .name {
       font-size: 1.2rem;
-      color: white;
     }
 
     .parking-container {
@@ -166,6 +177,7 @@
       padding: 30px;
       border-radius: 12px;
       max-width: 900px;
+      animation: fadeIn 1.5s ease-in;
     }
 
     .section-header {
@@ -185,12 +197,12 @@
       border-radius: 10px;
       width: 45%;
       text-align: center;
+      animation: fadeIn 1s ease-in-out;
     }
 
     .stat-number {
       font-size: 2rem;
       font-weight: 700;
-      color: white;
     }
 
     .slot {
@@ -204,7 +216,13 @@
       font-size: 1.1rem;
       display: inline-block;
       color: white;
+      animation: scaleIn 0.5s ease;
       transition: transform 0.2s ease-in-out;
+    }
+
+    @keyframes scaleIn {
+      from { transform: scale(0.6); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
     }
 
     .slot:hover {
@@ -215,34 +233,64 @@
     .selected-slot {
       background-color: white;
       color: black;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(255,255,255,0.6); }
+      70% { box-shadow: 0 0 0 10px rgba(255,255,255,0); }
+      100% { box-shadow: 0 0 0 0 rgba(255,255,255,0); }
     }
 
     .occupied-slot {
       background-color: red !important;
       cursor: not-allowed;
+      animation: bounceIn 0.5s ease;
+    }
+
+    @keyframes bounceIn {
+      0% { transform: scale(0.5); opacity: 0; }
+      60% { transform: scale(1.2); opacity: 1; }
+      100% { transform: scale(1); }
     }
 
     .hour-options {
       display: none;
-      justify-content: center;
-      gap: 15px;
+      flex-direction: column;
+      align-items: center;
       margin-top: 20px;
-      flex-wrap: wrap;
+      animation: fadeIn 1s ease-in-out;
     }
 
-    .hour-option {
-      background-color: white;
-      color: black;
-      padding: 10px 20px;
-      font-size: 1.1rem;
-      cursor: pointer;
+    .hour-options input {
+      padding: 10px;
+      margin: 5px;
       border-radius: 5px;
       border: none;
+      font-size: 1rem;
+    }
+
+    .hour-options button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      cursor: pointer;
+      background: white;
+      color: black;
+      border: none;
+      border-radius: 5px;
+      margin-top: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .hour-options button:hover {
+      background: #eee;
+      transform: scale(1.05);
     }
 
     .bill {
       margin-top: 30px;
       display: none;
+      animation: fadeIn 1s ease-in-out;
     }
 
     .bill-table {
@@ -265,10 +313,9 @@
     }
 
     @keyframes fadeIn {
-      0% { opacity: 0; }
-      100% { opacity: 1; }
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
-
   </style>
 </head>
 <body>
@@ -277,14 +324,12 @@
   <div class="main-container">
     <nav class="navbar">
       <div class="logo">SMART CAR PARKING SYSTEM</div>
-      <div class="right-nav"></div>
     </nav>
 
     <section class="hero">
       <div class="hero-text">
         <h1>Smart Car Parking</h1>
-        <p>"Park Like a Pro, No More Searching for Spaces!"  
-           "Because Your Car Deserves a VIP Spot."</p>
+        <p>"Park Like a Pro, No More Searching for Spaces!"<br>"Because Your Car Deserves a VIP Spot."</p>
         <div class="hero-buttons">
           <button class="hero-btn primary-btn" onclick="showParkingArea()">Parking Area</button>
           <button class="hero-btn secondary-btn" onclick="showBookingPage()">Booking</button>
@@ -296,15 +341,16 @@
   <div class="parking-container" id="parkingSystem" style="display:none;">
     <h2 class="section-header">Smart Car Parking</h2>
     <div class="stats-row">
-      <div class="stat-card"><div class="stat-number" id="availableCount">10</div><div>Available</div></div>
-      <div class="stat-card"><div class="stat-number" id="occupiedCount">0</div><div>Occupied</div></div>
+      <div class="stat-card"><div class="stat-number" id="availableCount">--</div><div>Available</div></div>
+      <div class="stat-card"><div class="stat-number" id="occupiedCount">--</div><div>Occupied</div></div>
     </div>
     <div id="slotsGrid"></div>
-    <div class="hour-options" id="hourOptions"></div>
+    <div class="hour-options" id="hourOptions">
+      <input type="datetime-local" id="inTimeInput" />
+      <input type="datetime-local" id="outTimeInput" />
+      <button onclick="bookWithCustomTimes()">Confirm Booking</button>
+    </div>
   </div>
-
-  <!-- Step Down Space (only 2 lines now) -->
-  <br><br>
 
   <div class="about-container" id="about">
     <h2 class="about-header">About Us</h2>
@@ -332,17 +378,21 @@
 
   <script>
     const totalSlots = 10;
-    let available = totalSlots;
     let selectedSlot = null;
     const starsContainer = document.getElementById('starsContainer');
 
-    for (let i = 0; i < 150; i++) {
+    for (let i = 0; i < 200; i++) {
       const star = document.createElement('div');
       star.className = 'star';
       star.style.top = `${Math.random() * 100}%`;
       star.style.left = `${Math.random() * 100}%`;
-      star.style.animationDuration = `${5 + Math.random() * 5}s`;
+      star.style.animationDuration = `${3 + Math.random() * 5}s`;
       starsContainer.appendChild(star);
+    }
+
+    const occupiedSlots = new Set();
+    while (occupiedSlots.size < 4) {
+      occupiedSlots.add(Math.floor(Math.random() * totalSlots) + 1);
     }
 
     function showBookingPage() {
@@ -356,9 +406,7 @@
 
     function createSlots() {
       const grid = document.getElementById('slotsGrid');
-      const options = document.getElementById('hourOptions');
       grid.innerHTML = '';
-      options.innerHTML = '';
       selectedSlot = null;
 
       for (let i = 1; i <= totalSlots; i++) {
@@ -366,17 +414,19 @@
         div.className = 'slot';
         div.id = 'slot-' + i;
         div.innerText = 'Slot ' + i;
-        div.onclick = () => selectSlot(i);
+
+        if (occupiedSlots.has(i)) {
+          div.classList.add('occupied-slot');
+        } else {
+          div.onclick = () => selectSlot(i);
+        }
+
         grid.appendChild(div);
       }
 
-      for (let i = 1; i <= 10; i++) {
-        const btn = document.createElement('button');
-        btn.className = 'hour-option';
-        btn.innerText = `${i} Hour${i > 1 ? 's' : ''}`;
-        btn.onclick = () => selectDuration(i);
-        options.appendChild(btn);
-      }
+      const available = totalSlots - occupiedSlots.size;
+      document.getElementById('availableCount').innerText = available;
+      document.getElementById('occupiedCount').innerText = occupiedSlots.size;
     }
 
     function selectSlot(num) {
@@ -391,32 +441,42 @@
       document.getElementById('hourOptions').style.display = 'flex';
     }
 
-    function selectDuration(hours) {
-      if (!selectedSlot) return alert("Please select a slot first.");
-      const slot = document.getElementById('slot-' + selectedSlot);
-      const inTime = new Date();
-      const outTime = new Date(inTime.getTime() + hours * 60 * 60 * 1000);
-      const price = hours * 50;
+    function bookWithCustomTimes() {
+      const inInput = document.getElementById('inTimeInput').value;
+      const outInput = document.getElementById('outTimeInput').value;
 
+      if (!selectedSlot) return alert("Please select a slot first.");
+      if (!inInput || !outInput) return alert("Please enter both IN and OUT times.");
+
+      const inTime = new Date(inInput);
+      const outTime = new Date(outInput);
+      const duration = (outTime - inTime) / (1000 * 60 * 60);
+      if (duration <= 0) return alert("OUT time must be after IN time.");
+
+      const price = Math.ceil(duration) * 50;
+      const slot = document.getElementById('slot-' + selectedSlot);
       slot.classList.remove('selected-slot');
       slot.classList.add('occupied-slot');
       slot.onclick = null;
 
       document.getElementById('bill-in-time').innerText = inTime.toLocaleString();
       document.getElementById('bill-out-time').innerText = outTime.toLocaleString();
-      document.getElementById('bill-total-time').innerText = `${hours} Hour${hours > 1 ? 's' : ''}`;
+      document.getElementById('bill-total-time').innerText = `${Math.ceil(duration)} Hour${Math.ceil(duration) > 1 ? 's' : ''}`;
       document.getElementById('bill-amount').innerText = `₹${price}`;
       document.getElementById('bill').style.display = 'block';
 
-      available--;
-      document.getElementById('availableCount').innerText = available;
-      document.getElementById('occupiedCount').innerText = totalSlots - available;
+      occupiedSlots.add(selectedSlot);
+      document.getElementById('availableCount').innerText = totalSlots - occupiedSlots.size;
+      document.getElementById('occupiedCount').innerText = occupiedSlots.size;
+
       selectedSlot = null;
       document.getElementById('hourOptions').style.display = 'none';
+      document.getElementById('inTimeInput').value = '';
+      document.getElementById('outTimeInput').value = '';
     }
 
     function redirectToNextPage() {
-      window.location.href = 'nextPage.html';
+      window.location.href = 'payment.html';
     }
 
     createSlots();
